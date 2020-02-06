@@ -1,0 +1,35 @@
+module.exports = {
+	treeEl:['DM','CR','LS','ST','PR'],
+	treeData:{
+		root:{
+			id:1,
+			type:"DM",
+			childrenType:["CR"],
+			name:"root",
+			children:[
+				{
+					id:2,
+					type:"CR",
+					childrenType:["LS"],
+					name:"chapter",
+					children:[
+						{
+							id:3,
+							type:"LS",
+							childrenType:["ST","PR"],
+							name:"lesson",
+							children:[
+								{
+									id:4,
+									type:"ST",
+									name:"staple",
+									children:[]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+};
