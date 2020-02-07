@@ -18,8 +18,15 @@ const schema = gql`
 		curriculumId:ID
 		title:String
 	}
+	enum ParentType{
+		LESSON
+		CHAPTER
+	}
 	input StapleInput{
 		title:String
+		parentType:ParentType!
+		parentId:String!
+		problems:[ID!]!
 	}
 	input LessonInput{
 		uid:String!
@@ -54,6 +61,7 @@ const schema = gql`
 		uid:String
 		title:String
 		chapterId:ID
+		staples:[Staple]
 	}
 	type Problem{
 		id:ID
@@ -67,6 +75,7 @@ const schema = gql`
 		id:ID
 		title:String
 		problems:[Problem]
+		parentId:ID
 	}
 `;
 

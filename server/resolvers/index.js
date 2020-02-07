@@ -14,25 +14,36 @@ module.exports = {
 	},
 	Curriculum:{
 		async chapter(parent, args, {conn}){
-			return chapterLoader().load(conn,parent.id);
-			// const c= await conn.promise();
-			// const [row] = await c.query(`
-			// SELECT
-			// 	*
-			// FROM
-			// 	chapters
-			// WHERE
-			// 	curriculum_id=${parent.id}
-			// `);
-			// return row;
+			const c = await conn.promise();
+			const [row]  = await c.query(`
+			SELECT
+				*	
+			FROM
+				chapters
+			WHERE
+				curriculum_id=${parent.id}
+				`);
+			return row;
 		}
 	},
 	Chapter:{
-		lessons(parent, args, {conn}){
-			console.info(parent);
+		async lessons(parent, args, {conn, lessonLoader}){
+			const c = await conn.promise();
+			const [row]  = await c.query(`
+			SELECT
+				*	
+			FROM
+				lessons
+			WHERE
+				chapter_id=${parent.id}
+				`);
+			console.info('d')
+			return lessonLoader.load(parent.id);
+		}
+	},
+	Lesson:{
+		staples(parent, args, {conn}){
 
-			chapterLoader.load(args.id);
-			return []
 		}
 	},
 	Staple:{
@@ -76,10 +87,13 @@ module.exports = {
 			}
 		},
 		async createStaple(_,args,{conn}){
-			const convertedValue= await conn.promise();
-			const con = converter(args.input);
+			const c= await conn.promise();
+			const {parentType, parentId, problems, title} = args.input;
 			try{
-				const [result] = await convertedValue.query(`INSERT INTO staples SET ${con}`);
+				const [result] = await c.query(`INSERT INTO staples SET title=?, parent_type=?, parent_id=?`,[title,parentType,parentId]);
+				const stapleId = result.insertId;
+				const q = problems.map(pId => [stapleId,pId]);
+				await c.query(`INSERT INTO staple_problem_relation (staple_id, problem_id) values ?;`,[q]);
 				return result.insertId;
 			}catch (e) {
 				throw e;

@@ -1,18 +1,19 @@
 const DataLoader = require('dataloader');
 
-const chapterLoader = (conn,ids)=>{
-	return new DataLoader(async() => {
+const chapterLoader = (conn) =>{
+	return new DataLoader(async ids => {
 		const c = await conn.promise();
-		const [row] = await c.query(`
+		const [result] = await c.query(`
 		SELECT
 			*
 		FROM
-			chapters
-		WHERE
-			curriculum_id=?
-		`,ids);
-		console.info(keys);
-		return ids.map(id => row[id])
+			lessons
+		`);
+		const map = {}
+		result.forEach(r => {
+			map[r.id] = r
+		});
+		return ids.map(id => map[id] );
 	});
 };
 
