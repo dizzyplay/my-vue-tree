@@ -79,7 +79,7 @@
 					id: this.id,
 					type: this.type,
 				};
-				await this.$store.dispatch('common/selectNode',{type:'DM',id:this.id});
+				await this.$store.dispatch('common/selectNode',{type:this.type,id:this.id});
 				this.$store.commit('common/changeNode', {node})
 			},
 			openChild() {

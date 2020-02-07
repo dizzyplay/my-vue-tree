@@ -60,7 +60,16 @@ export default {
 			state.cfn = fn
 		},
 		addChildTree(state, {data}){
-			state.treeData.root.children.push(...data)
+			data = data.map(d => {
+				return {
+					...d,
+					isOpen:false,
+					children:[],
+					type:'CT'
+				}
+			});
+			console.info(data)
+			state.treeData.root.children.push(...data);
 		},
 		sendTreeData(state, {data}){
 			console.info(data)
