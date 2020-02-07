@@ -41,10 +41,11 @@
 		},
 		data() {
 			return {
-				nodeId: 4
+				nodeId: 4,
+				copyTree:{}
 			}
 		},
-		mounted() {
+		async mounted() {
 			console.log('mounted');
 		},
 		methods: {

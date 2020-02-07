@@ -9,7 +9,7 @@
 				:style="{backgroundColor:`${selected ? 'red' : 'white'}`}"
 				@click="()=>handleClickNode(id)"
 				class="node-title-area">
-				{{ type }} - {{ name }}
+				{{ type }} - {{ title }}
 			</div>
 			<div class="add-btn" v-for="t in childrenType" :key="t">
 				<div @click="addChildren(t)">
@@ -35,10 +35,10 @@
 			return {
 				isOpen: this.treeData.isOpen || false,
 				id: this.treeData.id || 0,
-				name: this.treeData.name,
-				type: this.treeData.type,
-				childrenType: this.treeData.childrenType,
-				children: this.treeData.children,
+				title: this.treeData.title || '',
+				type: this.treeData.type || '',
+				childrenType: this.treeData.childrenType || '',
+				children: this.treeData.children || [],
 				choice: false
 			}
 		},
@@ -73,12 +73,13 @@
 			}
 		},
 		methods: {
-			handleClickNode(id) {
+			async handleClickNode(id) {
 				this.treeData.selected = id === this.id;
 				const node = {
 					id: this.id,
 					type: this.type,
 				};
+				await this.$store.dispatch('common/selectNode',{type:'DM',id:this.id});
 				this.$store.commit('common/changeNode', {node})
 			},
 			openChild() {

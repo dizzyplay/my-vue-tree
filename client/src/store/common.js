@@ -1,3 +1,13 @@
+// {
+// 	id: 1,
+// 		type: "DM",
+// 	childrenType: ["CR"],
+// 	name: "root",
+// 	children: []
+// }
+import gql from 'graphql-tag';
+import {apolloClient} from "../main";
+
 export default {
 	namespaced: true,
 	state: {
@@ -6,81 +16,55 @@ export default {
 		},
 		currentSelectedNode:null,
 		treeData: {
-			root: {
-				id: 1,
-				type: "DM",
-				childrenType: ["CR"],
-				name: "root",
-				children: [
-					{
-						id: 2,
-						type: "CR",
-						childrenType: ["LS"],
-						name: "chapter",
-						children: [
-							{
-								id: 3,
-								type: "LS",
-								childrenType: ["ST", "PR"],
-								name: "lesson",
-								children: [
-									{
-										id: 4,
-										type: "ST",
-										name: "staple",
-										children: []
-									}
-								]
-							}
-						],
-					},
-					{
-						id: 5,
-						type: "CR",
-						childrenType: ["LS"],
-						name: "chapter",
-						children: [
-							{
-								id: 6,
-								type: "ST",
-								name: "staple",
-								children: []
-							},
-							{
-								id: 8,
-								type: "ST",
-								name: "staple",
-								children: []
-							},
-							{
-								id: 9,
-								type: "ST",
-								name: "staple",
-								children: []
-							},
-							{
-								id: 10,
-								type: "ST",
-								name: "staple",
-								children: []
-							},
-						]
-					},
-					{
-						id: 7,
-						type: "ST",
-						childrenType: ["PR"],
-						name: "staple",
-						children: []
-					}
-				]
+			root:{
+				id:5,
+				type:"DM",
+				title:'root',
+				children:[]
 			}
 		}
 	},
-	actions: {},
+	actions: {
+		async selectNode({commit},data){
+			console.info(data);
+			const res= await apolloClient.query({query:gql`
+			query Curriculum($id:ID!) {
+				curriculum(id:$id){
+					id
+					title
+					chapter {
+						id
+						title
+					}
+				}
+			}
+			`,variables:{id:data.id}});
+			commit('addChildTree',{data:res.data.curriculum.chapter});
+			console.log(res);
+		},
+		async initTree({commit}){
+			const res= await apolloClient.query({query:gql`
+			query Curriculum($id:ID!) {
+				curriculum(id:$id){
+					id
+					title
+				}
+			}
+			`,variables:{id:5}});
+			commit('sendTreeData',{data:res.data.curriculum});
+			console.log(res);
+		}
+	},
 	mutations: {
 		sendFn(state,{fn}) {
 			state.cfn = fn
+		},
+		addChildTree(state, {data}){
+			state.treeData.root.children.push(...data)
+		},
+		sendTreeData(state, {data}){
+			console.info(data)
+			state.treeData.root = {...state.treeData.root,title:data.title}
 		},
 		changeNode(state,{node}){
 			state.currentSelectedNode = node;
