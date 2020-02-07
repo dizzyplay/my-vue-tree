@@ -17,7 +17,10 @@ module.exports = {
 			const c = await conn.promise();
 			const [row]  = await c.query(`
 			SELECT
-				*	
+				id,
+				uid,
+				curriculum_id AS curriculumId,
+				title	
 			FROM
 				chapters
 			WHERE
@@ -31,24 +34,27 @@ module.exports = {
 			const c = await conn.promise();
 			const [row]  = await c.query(`
 			SELECT
-				*	
+				id,
+				uid,
+				title,
+				chapter_id AS chapterId
 			FROM
 				lessons
 			WHERE
 				chapter_id=${parent.id}
 				`);
-			console.info('d')
 			return lessonLoader.load(parent.id);
 		}
 	},
 	Lesson:{
-		staples(parent, args, {conn}){
-
+		async staples(parent, args, {conn, stapleLoader}){
+			return stapleLoader.load(parent.id);
 		}
 	},
 	Staple:{
-		problems(){
-			return []
+		async problems(parent,args,{conn, problemLoader}){
+			return problemLoader.load(parent.id);
+
 		}
 	},
 	Mutation: {

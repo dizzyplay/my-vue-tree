@@ -3,6 +3,7 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const mysql = require('mysql2');
 const DataLoader = require('dataloader');
+const {batchLesson, batchProblem, batchStaple} = require('./dataloaders');
 
 const conn = mysql.createPool({
 	host: 'localhost',
@@ -11,28 +12,17 @@ const conn = mysql.createPool({
 	password: 'test'
 });
 
-async function batchLesson(keys, conn){
-	const c = await conn.promise();
-	const [row] =await c.query(`
-		SELECT
-			*
-		FROM
-			lessons
-		WHERE chapter_id IN (?)`,[keys]);
 
-	const lessonMap ={};
-	keys.map(k=>{
-		lessonMap[k] = row.filter(r=>r.chapter_id === k)
-	})
-	const t = keys.map(key => lessonMap[key])
-	console.info('a')
-	return t;
-}
 
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
-	context: () => ({conn,lessonLoader:new DataLoader(keys => batchLesson(keys,conn))})
+	context: () => ({
+		conn,
+		lessonLoader: new DataLoader(keys => batchLesson(keys, conn)),
+		stapleLoader: new DataLoader(keys => batchStaple(keys, conn)),
+		problemLoader: new DataLoader(keys => batchProblem(keys, conn))
+	})
 });
 
 server.listen().then(({url}) => {
