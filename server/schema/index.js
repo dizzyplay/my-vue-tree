@@ -35,6 +35,9 @@ const schema = gql`
 	}
 	type Query{
 		curriculum(id:ID):Curriculum
+		chapter(id:ID):Chapter
+		staple(id:ID):Staple
+		problem(id:ID):Problem
 	}
 	type Mutation {
 		createProblem(input:ProblemInput!):ID!

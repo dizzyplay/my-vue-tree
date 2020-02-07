@@ -42,15 +42,19 @@ async function batchProblem(keys, conn) {
 	const [row] = await c.query(
 		`
 		SELECT
-			*
+			p.id AS id,
+			spr.staple_id AS staple_id,
+			p.uid AS uid,
+			p.question AS question,
+			p.solution AS solution
 		FROM
-			problems
+			problems p
 		JOIN
 			staple_problem_relation spr
 		ON
-			problems.id = spr.problem_id
+			p.id = spr.problem_id
 		WHERE
-			problems.id in (
+			p.id in (
 				SELECT
 					problem_id
 				FROM
@@ -58,7 +62,6 @@ async function batchProblem(keys, conn) {
 				WHERE
 					staple_id IN (${keys.join(", ")})
 				);`,keys.map(k => `"${k}"`).join(', '));
-
 	const problemMap = {};
 	keys.map(key => {
 		problemMap[key] = row.filter(r => r.staple_id == key);

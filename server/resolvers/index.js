@@ -5,11 +5,47 @@ module.exports = {
 		async curriculum(_,args,{conn}){
 			const c = await conn.promise();
 			const [row] = await c.query(`
-		SELECT 
-			*
-		FROM curriculums 
-		WHERE id=${args.id}`);
+				SELECT 
+					*
+				FROM curriculums 
+				WHERE id=${args.id}`);
 			return row[0]
+		},
+		async chapter(_,args,{conn}){
+			const c = await conn.promise();
+			const [row] = await c.query(`
+			SELECT
+				*
+			FROM
+				chapters
+			WHERE
+				id=${args.id}
+			`)
+			return row[0]
+		},
+		async staple(_,args,{conn}){
+			const c= await conn.promise();
+			const [row] = await c.query(`
+			SELECT 
+				*
+			FROM
+				staples
+			WHERE
+				id=${args.id}
+			`);
+			return row[0];
+		},
+		async problem(_,args,{conn}){
+			const c= await conn.promise();
+			const [row] = await c.query(`
+			SELECT 
+				*
+			FROM
+				problems
+			WHERE
+				id=${args.id};
+			`);
+			return row[0];
 		},
 	},
 	Curriculum:{
