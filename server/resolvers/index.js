@@ -1,22 +1,43 @@
-function converter(input){
-	let acc='';
-	for(let [k,v] of Object.entries(input)){
-		let match;
-		const r = /([A-Z])/gm;
-		while((match=r.exec(k)) !== null){
-			k = k.replace(match[1],'_'+match[1].toLowerCase());
-		}
-		acc+=`${k}="${v}",`;
-	}
-	return acc.slice(0,-1);
-}
+const {chapterLoader} = require('../dataloaders');
+
 module.exports = {
 	Query: {
-		async hello(_,args,{conn}){
+		async curriculum(_,args,{conn}){
 			const c = await conn.promise();
-			const [row] = await c.query('select * from problems');
-			console.info(row);
-			return 'hello'
+			const [row] = await c.query(`
+		SELECT 
+			*
+		FROM curriculums 
+		WHERE id=${args.id}`);
+			return row[0]
+		},
+	},
+	Curriculum:{
+		async chapter(parent, args, {conn}){
+			return chapterLoader().load(conn,parent.id);
+			// const c= await conn.promise();
+			// const [row] = await c.query(`
+			// SELECT
+			// 	*
+			// FROM
+			// 	chapters
+			// WHERE
+			// 	curriculum_id=${parent.id}
+			// `);
+			// return row;
+		}
+	},
+	Chapter:{
+		lessons(parent, args, {conn}){
+			console.info(parent);
+
+			chapterLoader.load(args.id);
+			return []
+		}
+	},
+	Staple:{
+		problems(){
+			return []
 		}
 	},
 	Mutation: {
@@ -78,3 +99,16 @@ module.exports = {
 		},
 	}
 };
+
+function converter(input){
+	let acc='';
+	for(let [k,v] of Object.entries(input)){
+		let match;
+		const r = /([A-Z])/gm;
+		while((match=r.exec(k)) !== null){
+			k = k.replace(match[1],'_'+match[1].toLowerCase());
+		}
+		acc+=`${k}="${v}",`;
+	}
+	return acc.slice(0,-1);
+}
