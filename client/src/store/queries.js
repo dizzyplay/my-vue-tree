@@ -10,6 +10,23 @@ const rootQuery = gql`
 				id
 				uid
 				title
+				chapters{
+					id
+					title
+					lessons{
+						id
+						title
+						staples{
+							id
+							title
+							problems{
+								id
+								title
+								question
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -28,48 +45,9 @@ const curriculumQuery = () =>
 	}
 `;
 
-export const fetchNodeData = async ({id, type}) => {
-	let res;
-	let data;
-	let tree;
-	switch (type) {
-		case 'root':
-			res = await apolloClient.query({query: rootQuery});
-			data = res.data[type];
-			tree =  makeTree(data, type, 'curriculums');
-			tree.id =0;
-			return tree;
-		case 'curriculum':
-			res = await apolloClient.query({query: curriculumQuery(type), variables: {id}});
-			data = res.data[`${type}`];
-			tree = makeTree(data, type, 'chapters');
-			return tree
-		case 'chapter':
-			break;
-		default:
-			break;
-	}
-};
-
-const makeTree = (data, type, targetChildType) => {
-	let tree = {};
-	for (const [k, v] of Object.entries(data)) {
-		if (k === targetChildType) {
-			tree.children = v.map(target => {
-				return {
-					id: target.id,
-					title: target.title,
-					isOpen: false,
-					type: getShortTypeName(`${targetChildType.slice(0,-1)}`),
-					children: []
-				}
-			})
-		}else {
-			tree[k] = v;
-		}
-		tree.type = getShortTypeName(type)
-	}
-	return tree;
+export const fetchNodeData = async () => {
+	const res = await apolloClient.query({query: rootQuery});
+	return res.data.root;
 };
 
 const getShortTypeName = (type) => {

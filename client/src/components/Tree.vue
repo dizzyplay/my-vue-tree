@@ -9,7 +9,7 @@
 				:style="{backgroundColor:`${selected ? 'red' : 'white'}`}"
 				@click="()=>handleClickNode(treeData.id)"
 				class="node-title-area">
-				{{treeData.id}} - {{ treeData.type }} - {{treeData.title}}
+				{{treeData.id}} - {{ type }} - {{treeData.title}}
 			</div>
 <!--			<div class="add-btn" v-for="t in childrenType" :key="t">-->
 <!--				<div @click="addChildren(t)">-->
@@ -17,7 +17,7 @@
 <!--				</div>-->
 <!--			</div>-->
 		</div>
-		<div v-if="isOpen" v-for="c in treeData.children" :key="c.id" class="child-node">
+		<div v-if="isOpen" v-for="c in children" :key="c.id" class="child-node">
 			<Tree :tree-data="c" :control-fn="controlFn"/>
 		</div>
 	</div>
@@ -34,22 +34,56 @@
 		data() {
 			return {
 				isOpen: false,
+				children:[],
+				type:'',
+				choice: false
 				// id: this.treeData.id || 0,
 				// title: '',
 				// type: this.treeData.type || '',
 				// childrenType: this.treeData.childrenType || '',
 				// children: this.treeData.children || [],
-				choice: false
 			}
 		},
 		mounted() {
 			if (typeof this.controlFn === 'function') {
 				this.controlFn(this);
 			}
-			// fetch this node
-			this.$store.dispatch('common/fetchCurrentNode',{id:this.treeData.id,type:this.treeData.type});
+			if(this.treeData['curriculums']){
+				this.children = this.treeData.curriculums
+				this.type = 'DM'
+			}
+			if(this.treeData['chapters']){
+				this.children = this.treeData.chapters
+				this.type = 'CR'
+			}
+			if(this.treeData['lessons']){
+				this.children = this.treeData.lessons
+				this.type = 'CT'
+			}
+			if(this.treeData['staples']){
+				this.children = this.treeData.staples
+				this.type = 'LS'
+			}
+			if(this.treeData['problems']){
+				this.children = this.treeData.problems
+				this.type = 'ST'
+			}
+			if(this.treeData['question']){
+				this.type = 'PR'
+			}
 		},
 		watch: {
+			treeData(){
+				console.info(this.treeData)
+				if(this.treeData['curriculums']){
+					console.info('asdf')
+					this.children = this.treeData.curriculums
+				}
+				if(this.treeData['chapters']){
+					console.info('chapettttttttttttt')
+					this.children = this.treeData.chapters
+				}
+			},
 			controlFn() {
 				if (typeof this.controlFn === 'function') {
 					console.log('exe fn');
@@ -59,10 +93,10 @@
 		},
 		computed: {
 			...mapState({
-				currentSelectedNode: state => state.common.currentSelectedNode
+				currentSelectedNode: state => state.common.currentSelectedNode,
 			}),
 			hasChildren() {
-				return this.treeData.children.length > 0
+				return this.children.length > 0
 			},
 			openStatus() {
 				return this.isOpen ? 'close' : 'open'
@@ -76,12 +110,7 @@
 		},
 		methods: {
 			async handleClickNode(id) {
-				const node = {
-					id: this.treeData.id,
-					type: this.treeData.type,
-				};
-				console.info(node)
-				this.$store.commit('common/changeNode', {node})
+				this.$store.commit('common/changeNode', {node:this.treeData})
 			},
 			openChild() {
 				this.isOpen = !this.isOpen;

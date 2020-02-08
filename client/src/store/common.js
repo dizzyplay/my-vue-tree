@@ -29,23 +29,6 @@ export default {
 
 	},
 	actions: {
-		async fetchCurrentNode({commit},data){
-			// fetch from server about each node include children
-			console.info('fetchCurrentNode!!!!!!!!');
-			let tree;
-			switch (data.type) {
-				case 'DM':
-					tree = await fetchNodeData({type:'root'});
-					commit('insertTree',{target:{id:"0", type:'root'},tree});
-					break;
-				case 'CR':
-					tree = await fetchNodeData({id:data.id, type:'curriculum'});
-					commit('insertTree',{target:{id:tree.id,type:'CR'},tree});
-					break;
-				default:
-					break;
-			}
-		},
 		async selectNode({commit}, data) {
 			console.info(data);
 			const res = await apolloClient.query({
@@ -66,12 +49,19 @@ export default {
 			console.log(res);
 		},
 		async initTree({commit}) {
+			const tree = await fetchNodeData();
+			commit('INIT_TREE',{tree})
 		}
 	},
 	mutations: {
-		insertTree(state, {target, tree}){
-			traverseAndInsert(state.treeData, target.id, target.type,tree);
-			console.info(state.treeData.root)
+		[`INIT_TREE`](state,{tree}){
+			console.info(tree)
+			tree.id=0;
+			tree.type='DM';
+			state.treeData.root=tree;
+		},
+		changeCurrentNodeTitle(state,{title}){
+			state.currentSelectedNode.title = title
 		},
 		addChildTree(state, {data}) {
 			data = data.map(d => {
@@ -88,6 +78,7 @@ export default {
 		sendTreeData(state, {data}) {
 		},
 		changeNode(state, {node}) {
+			console.info(node)
 			state.currentSelectedNode = node;
 		},
 		addNode(state, {parentNode, node}) {

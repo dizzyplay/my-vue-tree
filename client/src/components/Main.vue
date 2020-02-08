@@ -13,10 +13,14 @@
 				<input v-model="nodeId"/>
 				<button @click="selectNode">select node</button>
 			</p>
+			<p>
+				<input v-model="nodeId"/>
+				<input v-model="nodeTitle">
+				<button @click="changeNodeTitle">change node title</button>
+			</p>
 		</div>
 		<div>
 			<editor/>
-			{{ this.treeData }}
 		</div>
 	</div>
 </template>
@@ -42,7 +46,8 @@
 		},
 		data() {
 			return {
-				nodeId: 4,
+				nodeId: 14,
+				nodeTitle:''
 			}
 		},
 		async mounted() {
@@ -50,14 +55,15 @@
 			await this.$store.dispatch('common/initTree')
 		},
 		methods: {
+			changeNodeTitle(){
+				this.$store.commit('common/changeCurrentNodeTitle',{title:this.nodeTitle})
+			},
 			selectNode() {
 				const nodeId = Number(this.nodeId);
 				const fn = function (self) {
-					if (self.id < nodeId && ['CR', 'LS', 'DM'].includes(self.type)) {
-						self.isOpen = true
+					if (self.treeData.id < nodeId && ['CR', 'LS', 'DM','CT'].includes(self.type)) {
+						const node = self.treeData
 					}
-					const node = {id: this.id, type: this.type}
-					this.$store.commit('common/changeNode', {node})
 				};
 				this.controlNode(fn);
 			},

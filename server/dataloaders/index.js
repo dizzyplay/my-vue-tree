@@ -45,6 +45,7 @@ async function batchProblem(keys, conn) {
 			p.id AS id,
 			spr.staple_id AS staple_id,
 			p.uid AS uid,
+			p.title AS title,
 			p.question AS question,
 			p.solution AS solution
 		FROM
