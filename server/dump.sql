@@ -16,14 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `test`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `test` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-
-USE `test`;
-
---
 -- Table structure for table `chapters`
 --
 
@@ -69,7 +61,7 @@ CREATE TABLE `curriculums` (
   `removed_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uid_index` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +70,7 @@ CREATE TABLE `curriculums` (
 
 LOCK TABLES `curriculums` WRITE;
 /*!40000 ALTER TABLE `curriculums` DISABLE KEYS */;
-INSERT INTO `curriculums` VALUES (5,'c1','더하기뺴기','2020-02-06 11:05:11',NULL,NULL);
+INSERT INTO `curriculums` VALUES (5,'c1','더하기뺴기','2020-02-06 11:05:11',NULL,NULL),(6,'c2','나누기더하기','2020-02-08 13:05:51',NULL,NULL),(7,'c3','곱하기','2020-02-08 13:13:41',NULL,NULL);
 /*!40000 ALTER TABLE `curriculums` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,9 +89,10 @@ CREATE TABLE `lessons` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `removed_at` timestamp NULL DEFAULT NULL,
+  `type` enum('LESSON') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uid_index` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +101,7 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
-INSERT INTO `lessons` VALUES (74,'L01',14,'lesson 01','2020-02-06 11:34:32',NULL,NULL),(75,'L02',14,'lesson 02','2020-02-06 11:35:17',NULL,NULL);
+INSERT INTO `lessons` VALUES (74,'L01',14,'lesson 01','2020-02-06 11:34:32','2020-02-07 06:58:53',NULL,'LESSON'),(75,'L02',14,'lesson 02','2020-02-06 11:35:17','2020-02-07 06:58:53',NULL,'LESSON'),(76,'L02',15,'lesson 01','2020-02-07 05:15:20','2020-02-07 06:58:53',NULL,'LESSON'),(77,'L02',15,'lesson 02','2020-02-07 05:15:23','2020-02-07 06:58:53',NULL,'LESSON'),(78,'L02',15,'lesson 03','2020-02-07 05:15:25','2020-02-07 06:58:53',NULL,'LESSON'),(79,'L02',16,'lesson 01','2020-02-07 05:15:34','2020-02-07 06:58:53',NULL,'LESSON'),(80,'L02',16,'lesson 02','2020-02-07 05:15:37','2020-02-07 06:58:53',NULL,'LESSON'),(81,'L02',16,'lesson 03','2020-02-07 05:15:39','2020-02-07 06:58:53',NULL,'LESSON');
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,6 +135,32 @@ INSERT INTO `problems` VALUES (9,'Problem','P01','problem 01','q','s'),(10,'Prob
 UNLOCK TABLES;
 
 --
+-- Table structure for table `staple_problem_relation`
+--
+
+DROP TABLE IF EXISTS `staple_problem_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `staple_problem_relation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `staple_id` varchar(45) NOT NULL,
+  `problem_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `staple_problem_relation`
+--
+
+LOCK TABLES `staple_problem_relation` WRITE;
+/*!40000 ALTER TABLE `staple_problem_relation` DISABLE KEYS */;
+INSERT INTO `staple_problem_relation` VALUES (3,'27','9'),(4,'27','10'),(5,'27','11'),(6,'28','9'),(7,'28','10'),(8,'28','11');
+/*!40000 ALTER TABLE `staple_problem_relation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `staples`
 --
 
@@ -154,8 +173,10 @@ CREATE TABLE `staples` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `removed_at` timestamp NULL DEFAULT NULL,
+  `parent_id` varchar(45) NOT NULL,
+  `parent_type` enum('LESSON','CHAPTER') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,6 +185,7 @@ CREATE TABLE `staples` (
 
 LOCK TABLES `staples` WRITE;
 /*!40000 ALTER TABLE `staples` DISABLE KEYS */;
+INSERT INTO `staples` VALUES (24,'staple01','2020-02-07 06:32:41',NULL,NULL,'74','LESSON'),(25,'staple01','2020-02-07 06:33:18',NULL,NULL,'74','LESSON'),(26,'staple01','2020-02-07 06:38:37',NULL,NULL,'74','LESSON'),(27,'staple01','2020-02-07 06:39:00',NULL,NULL,'74','LESSON'),(28,'staple01','2020-02-07 06:39:02',NULL,NULL,'74','LESSON');
 /*!40000 ALTER TABLE `staples` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -176,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-06 11:46:11
+-- Dump completed on 2020-02-08 17:38:26
