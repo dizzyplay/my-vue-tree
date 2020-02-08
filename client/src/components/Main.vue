@@ -43,12 +43,11 @@
 		data() {
 			return {
 				nodeId: 4,
-				copyTree:{}
 			}
 		},
 		async mounted() {
 			console.log('mounted');
-			this.$store.dispatch('common/initTree')
+			await this.$store.dispatch('common/initTree')
 		},
 		methods: {
 			selectNode() {
@@ -89,7 +88,7 @@
 			},
 			closeAll() {
 				const fn = function (self) {
-					console.info(self.id);
+					console.info(self.treeData.id);
 					self.isOpen = false;
 				};
 				this.$store.commit('common/sendFn', {fn})

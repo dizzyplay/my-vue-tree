@@ -34,6 +34,7 @@ const schema = gql`
 		chapterId:ID
 	}
 	type Query{
+		root:Root
 		curriculum(id:ID):Curriculum
 		chapter(id:ID):Chapter
 		staple(id:ID):Staple
@@ -46,11 +47,15 @@ const schema = gql`
 		createStaple(input:StapleInput):ID!
 		createLesson(input:LessonInput):ID!
 	}
+	type Root{
+		title:String
+		curriculums:[Curriculum]!
+	}
 	type Curriculum{
 		id:ID
 		uid:String
 		title:String
-		chapter:[Chapter]
+		chapters:[Chapter]
 	}
 	type Chapter{
 		id:ID

@@ -2,6 +2,17 @@ const {chapterLoader} = require('../dataloaders');
 
 module.exports = {
 	Query: {
+		async root(_,args, {conn}){
+			const c = await conn.promise();
+			const [row] = await c.query(`
+				SELECT
+					id,
+					title
+				FROM
+					curriculums
+			`);
+			return {title:'digital math cms'};
+		},
 		async curriculum(_,args,{conn}){
 			const c = await conn.promise();
 			const [row] = await c.query(`
@@ -48,8 +59,22 @@ module.exports = {
 			return row[0];
 		},
 	},
+	Root:{
+		async curriculums(parent, args, {conn}){
+			const c = await conn.promise();
+			const [row]  = await c.query(`
+			SELECT
+				id,
+				uid,
+				title	
+			FROM
+				curriculums
+				`);
+			return row;
+		}
+	},
 	Curriculum:{
-		async chapter(parent, args, {conn}){
+		async chapters(parent, args, {conn}){
 			const c = await conn.promise();
 			const [row]  = await c.query(`
 			SELECT

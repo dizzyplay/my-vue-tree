@@ -7,7 +7,7 @@
 			</div>
 			<div
 				:style="{backgroundColor:`${selected ? 'red' : 'white'}`}"
-				@click="()=>handleClickNode(id)"
+				@click="()=>handleClickNode(treeData.id)"
 				class="node-title-area">
 				{{treeData.id}} - {{ treeData.type }} - {{treeData.title}}
 			</div>
@@ -46,6 +46,8 @@
 			if (typeof this.controlFn === 'function') {
 				this.controlFn(this);
 			}
+			// fetch this node
+			this.$store.dispatch('common/fetchCurrentNode',{id:this.treeData.id,type:this.treeData.type});
 		},
 		watch: {
 			controlFn() {
@@ -57,7 +59,7 @@
 		},
 		computed: {
 			...mapState({
-				currentNode: state => state.common.currentSelectedNode
+				currentSelectedNode: state => state.common.currentSelectedNode
 			}),
 			hasChildren() {
 				return this.treeData.children.length > 0
@@ -66,19 +68,19 @@
 				return this.isOpen ? 'close' : 'open'
 			},
 			selected() {
-				if (this.currentNode) {
-					return this.currentNode.id === this.id
+				if (this.currentSelectedNode) {
+					return this.currentSelectedNode.id === this.treeData.id
 				}
 				return false
 			}
 		},
 		methods: {
 			async handleClickNode(id) {
-				this.treeData.selected = id === this.id;
 				const node = {
-					id: this.id,
-					type: this.type,
+					id: this.treeData.id,
+					type: this.treeData.type,
 				};
+				console.info(node)
 				this.$store.commit('common/changeNode', {node})
 			},
 			openChild() {
