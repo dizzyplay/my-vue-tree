@@ -16,6 +16,7 @@
 		</div>
 		<div>
 			<editor/>
+			{{ this.treeData }}
 		</div>
 	</div>
 </template>
@@ -47,6 +48,7 @@
 		},
 		async mounted() {
 			console.log('mounted');
+			this.$store.dispatch('common/initTree')
 		},
 		methods: {
 			selectNode() {

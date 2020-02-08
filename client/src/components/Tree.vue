@@ -9,15 +9,15 @@
 				:style="{backgroundColor:`${selected ? 'red' : 'white'}`}"
 				@click="()=>handleClickNode(id)"
 				class="node-title-area">
-				{{ type }} - {{ title }}
+				{{treeData.id}} - {{ treeData.type }} - {{treeData.title}}
 			</div>
-			<div class="add-btn" v-for="t in childrenType" :key="t">
-				<div @click="addChildren(t)">
-					add {{t}}
-				</div>
-			</div>
+<!--			<div class="add-btn" v-for="t in childrenType" :key="t">-->
+<!--				<div @click="addChildren(t)">-->
+<!--					add {{t}}-->
+<!--				</div>-->
+<!--			</div>-->
 		</div>
-		<div v-if="isOpen" v-for="c in children" :key="c.id" class="child-node">
+		<div v-if="isOpen" v-for="c in treeData.children" :key="c.id" class="child-node">
 			<Tree :tree-data="c" :control-fn="controlFn"/>
 		</div>
 	</div>
@@ -33,12 +33,12 @@
 		},
 		data() {
 			return {
-				isOpen: this.treeData.isOpen || false,
-				id: this.treeData.id || 0,
-				title: this.treeData.title || '',
-				type: this.treeData.type || '',
-				childrenType: this.treeData.childrenType || '',
-				children: this.treeData.children || [],
+				isOpen: false,
+				// id: this.treeData.id || 0,
+				// title: '',
+				// type: this.treeData.type || '',
+				// childrenType: this.treeData.childrenType || '',
+				// children: this.treeData.children || [],
 				choice: false
 			}
 		},
@@ -60,7 +60,7 @@
 				currentNode: state => state.common.currentSelectedNode
 			}),
 			hasChildren() {
-				return this.children.length > 0
+				return this.treeData.children.length > 0
 			},
 			openStatus() {
 				return this.isOpen ? 'close' : 'open'
@@ -79,7 +79,6 @@
 					id: this.id,
 					type: this.type,
 				};
-				await this.$store.dispatch('common/selectNode',{type:this.type,id:this.id});
 				this.$store.commit('common/changeNode', {node})
 			},
 			openChild() {
