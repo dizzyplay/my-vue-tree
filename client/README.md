@@ -1,19 +1,21 @@
-# vue-tree
 
-## Project setup
-```
-npm install
-```
+tree-component <-> store <-> other component
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## init tree
+fetch data -> store update -> render tree
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## tree data trigger
+function -> store -> execute fn each tree node
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+    const fn = (self)=>{
+        if (self.id === 3) {
+            self.isOpen = true
+        }
+    }
+    this.$store.commit('common/sendFn', {fn})
+
+    then...
+
+    each Tree node execute function
+```

@@ -50,25 +50,31 @@
 			}
 			if(this.treeData['curriculums']){
 				this.children = this.treeData.curriculums
+				this.treeData.type='DM';
 				this.type = 'DM'
 			}
 			if(this.treeData['chapters']){
-				this.children = this.treeData.chapters
-				this.type = 'CR'
+				this.children = this.treeData.chapters;
+				this.treeData.type='CR';
+				this.type = 'CR';
 			}
 			if(this.treeData['lessons']){
 				this.children = this.treeData.lessons
+				this.treeData.type='CT';
 				this.type = 'CT'
 			}
 			if(this.treeData['staples']){
 				this.children = this.treeData.staples
+				this.treeData.type='LS';
 				this.type = 'LS'
 			}
 			if(this.treeData['problems']){
 				this.children = this.treeData.problems
+				this.treeData.type='ST';
 				this.type = 'ST'
 			}
 			if(this.treeData['question']){
+				this.treeData.type='PR';
 				this.type = 'PR'
 			}
 		},
@@ -78,10 +84,6 @@
 				if(this.treeData['curriculums']){
 					console.info('asdf')
 					this.children = this.treeData.curriculums
-				}
-				if(this.treeData['chapters']){
-					console.info('chapettttttttttttt')
-					this.children = this.treeData.chapters
 				}
 			},
 			controlFn() {
