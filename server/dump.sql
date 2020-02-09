@@ -32,7 +32,7 @@ CREATE TABLE `chapters` (
   `removed_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uid_index` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `chapters` (
 
 LOCK TABLES `chapters` WRITE;
 /*!40000 ALTER TABLE `chapters` DISABLE KEYS */;
-INSERT INTO `chapters` VALUES (14,'c01',5,'chapter 05','2020-02-06 11:29:36',NULL,NULL),(15,'c01',5,'chapter 05','2020-02-06 11:32:30',NULL,NULL),(16,'c01',5,'chapter 05','2020-02-06 11:37:22',NULL,NULL);
+INSERT INTO `chapters` VALUES (14,'c01',5,'chapter 05','2020-02-06 11:29:36',NULL,NULL),(15,'c01',5,'chapter 05','2020-02-06 11:32:30',NULL,NULL),(16,'c01',5,'chapter 05','2020-02-06 11:37:22',NULL,NULL),(17,'c01',6,'3나누기','2020-02-09 06:11:46',NULL,NULL),(18,'c01',6,'4 나누기','2020-02-09 06:11:58',NULL,NULL),(19,'c01',7,'4 곱하기','2020-02-09 06:26:32',NULL,NULL),(20,'c02',7,'5 곱하기','2020-02-09 06:26:38',NULL,NULL);
 /*!40000 ALTER TABLE `chapters` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-08 17:38:26
+-- Dump completed on 2020-02-09 12:41:40
