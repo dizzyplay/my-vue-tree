@@ -72,10 +72,10 @@
 							if (self.treeData.id == toSearch[i].id && ['CR', 'LS', 'DM','CT', 'ST'].includes(self.treeData.type)) {
 								console.info(self.treeData.id)
 								console.info(self.treeData.type)
-								self.isOpen = true
+								this.isOpen = true;
 								this.$store.commit('common/changeNode', {node:self.treeData})
 							}
-						},1)
+						},100)
 					}
 				};
 				this.controlNode(fn);

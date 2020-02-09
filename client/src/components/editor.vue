@@ -12,6 +12,7 @@
 		</div>
 		<div class="row">
 			<button @click="changeNodeTitle">save</button>
+			<button @click="addNode">add note</button>
 		</div>
 	</div>
 </template>
@@ -37,11 +38,23 @@
 		},
 		methods:{
 			addNode(){
-				console.info('asdf')
+				const parentId=this.currentNode.id;
+				const node = {
+					id:Math.floor(Math.random()*10000),
+					title: 'new tree node',
+					type: this.currentNode.type,
+					children: []
+				};
+				const fn = self => {
+					if(self['children'] && self.type === node.type && self.treeData.id == parentId){
+						self.children.push(node)
+					}
+				}
+				this.$store.commit('common/sendFn',{fn});
 			},
 			changeNodeTitle(){
 				this.$store.commit('common/changeCurrentNodeTitle',{title:this.title})
-			}
+			},
 		}
 	}
 </script>

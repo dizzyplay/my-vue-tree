@@ -75,18 +75,20 @@ export default {
 			console.info(data)
 			state.treeData.root.children.push(...data);
 		},
-		sendTreeData(state, {data}) {
-		},
 		changeNode(state, {node}) {
 			console.info(node)
 			state.currentSelectedNode = node;
 		},
-		addNode(state, {parentNode, node}) {
-			const parent = traversal(state.treeData.root, parentNode);
-			parent.children.push(node);
+		addNode(state, {node}) {
+			console.info(state.currentSelectedNode)
+			state.currentSelectedNode.lessons.push(node)
 		},
 		sendFn(state, {fn}) {
 			state.cfn = fn
+			setTimeout(()=>{
+				// 함수가 지정되어있어서 제거해야함 안그러면 마운트 될때마다 마지막으로 저장된 함수가 실행됨
+				state.cfn = ()=>{}
+			},1000)
 		},
 	}
 }
