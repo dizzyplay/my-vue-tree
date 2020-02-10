@@ -8,6 +8,8 @@
 				<button @click="closeAll">close all</button>
 				<button @click="selectAll">select all</button>
 				<button @click="unSelectAll">unselect All</button>
+				<button @click="testClick">test here</button>
+				<button @click="clickCheckBox">checkbox here</button>
 			</p>
 			<p>
 				id:<input v-model="nodeId"/>
@@ -59,6 +61,22 @@
 			await this.$store.dispatch('common/initTree')
 		},
 		methods: {
+			clickCheckBox(){
+				const fn = self => {
+					if( self.type === 'LS') {
+						self.choice = true;
+					}
+				}
+				this.$store.commit('common/sendFn',{fn});
+			},
+			testClick(){
+				const fn = self =>{
+					if (self.treeData.id == 0){
+						self.isOpen=true;
+					}
+				}
+				this.$store.commit('common/sendFn',{fn})
+			},
 			changeNodeTitle(){
 				this.$store.commit('common/changeCurrentNodeTitle',{title:this.nodeTitle})
 			},

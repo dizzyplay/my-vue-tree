@@ -11,11 +11,6 @@
 				class="node-title-area">
 				{{treeData.id}} - {{ type }} - {{treeData.title}}
 			</div>
-<!--			<div class="add-btn" v-for="t in childrenType" :key="t">-->
-<!--				<div @click="addChildren(t)">-->
-<!--					add {{t}}-->
-<!--				</div>-->
-<!--			</div>-->
 		</div>
 		<div v-if="isOpen" v-for="c in children" :key="c.id" class="child-node">
 			<Tree :tree-data="c" :control-fn="controlFn"/>
@@ -117,11 +112,6 @@
 			openChild() {
 				this.isOpen = !this.isOpen;
 				this.treeData.isOpen = this.isOpen;
-			},
-			addChildren(cType) {
-				const rId = Math.floor(Math.random() * 10000);
-				const targetNode = {id:rId, type: cType, name: "--new--", children: []};
-				this.$store.commit('common/addNode', {parentNode: this, node: targetNode});
 			},
 		},
 	}

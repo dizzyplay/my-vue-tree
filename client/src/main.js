@@ -24,9 +24,3 @@ export const rootInstance = new Vue({
   store
 }).$mount('#app');
 
-function sendFn(fn){
-  console.info('in main.js')
-  console.info(this)
-  this.$store.commit('common/sendFn',{fn})
-}
-export const wrapFn = sendFn.bind(rootInstance);

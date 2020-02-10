@@ -49,7 +49,7 @@
 					if(self['children'] && self.type === node.type && self.treeData.id == parentId){
 						self.children.push(node)
 					}
-				}
+				};
 				this.$store.commit('common/sendFn',{fn});
 			},
 			changeNodeTitle(){

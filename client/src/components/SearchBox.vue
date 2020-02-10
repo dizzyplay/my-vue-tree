@@ -5,7 +5,6 @@
 	</div>
 </template>
 <script>
-	import {wrapFn} from "../main";
 	import {sendFnToTree} from "../js/helper";
 
 	export default {
